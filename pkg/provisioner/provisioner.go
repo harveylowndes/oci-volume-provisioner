@@ -289,7 +289,7 @@ func (p *OCIProvisioner) Delete(volume *v1.PersistentVolume) error {
 		return errors.New("volumeid annotation not found on PV")
 	}
 
-	request := core.DeleteVolumeRequest{VolumeId: common.String(ociVolumeID)}
+	request := core.DeleteVolumeRequest{VolumeId: common.String(volume.Annotations[ociVolumeID])}
 	ctx, cancel := context.WithTimeout(p.ctx, p.timeout)
 	defer cancel()
 	return p.client.BlockStorage.DeleteVolume(ctx, request)
