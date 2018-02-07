@@ -243,9 +243,9 @@ def _volume_exists(compartment_id, volume, state):
     return False
 
 
-def _wait_for_volume(compartment_id, volume):
+def _wait_for_volume(compartment_id, volume, target_status='AVAILABLE'):
     num_polls = 0
-    while not _volume_exists(compartment_id, volume, 'AVAILABLE'):
+    while not _volume_exists(compartment_id, volume, target_status):
         _log("    waiting...")
         time.sleep(1)
         num_polls += 1
@@ -315,7 +315,7 @@ def _test_create_volume(compartment_id, claim_target, claim_volume_name):
     _kubectl("delete -f " + claim_target, exit_on_error=False)
 
     _log("Querying the OCI api to make sure a volume with this name now doesnt exist...")
-    if not _volume_exists(compartment_id, volume, 'TERMINATED'):
+    if not _wait_for_volume(compartment_id, volume, 'TERMINATED'):
         _log("Volume with name: " + volume + " still exists")
         sys.exit(1)
     _log("Volume: " + volume + " has now been terminated")

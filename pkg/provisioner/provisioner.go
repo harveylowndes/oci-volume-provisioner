@@ -284,12 +284,12 @@ func (p *OCIProvisioner) Delete(volume *v1.PersistentVolume) error {
 		return &controller.IgnoredError{Reason: "identity annotation on PV does not match ours"}
 	}
 
-	_, ok = volume.Annotations[ociVolumeID]
+	volumeID, ok := volume.Annotations[ociVolumeID]
 	if !ok {
 		return errors.New("volumeid annotation not found on PV")
 	}
 
-	request := core.DeleteVolumeRequest{VolumeId: common.String(volume.Annotations[ociVolumeID])}
+	request := core.DeleteVolumeRequest{VolumeId: common.String(volumeID)}
 	ctx, cancel := context.WithTimeout(p.ctx, p.timeout)
 	defer cancel()
 	return p.client.BlockStorage.DeleteVolume(ctx, request)
