@@ -228,7 +228,7 @@ func (p *OCIProvisioner) Provision(options controller.VolumeOptions) (*v1.Persis
 	glog.Infof("Creating volume size=%v AD=%s compartmentOCID=%q", volSizeMB, availabilityDomain.Name, compartmentOCID)
 
 	// TODO: Consider OpcRetryToken
-	details := newCreateVolumeDetails(availabilityDomainName, compartmentOCID, os.Getenv(volumePrefixEnvVarName), options.PVC.Name, volSizeMB)
+	details := newCreateVolumeDetails(*availabilityDomain.Name, compartmentOCID, os.Getenv(volumePrefixEnvVarName), options.PVC.Name, volSizeMB)
 	request := core.CreateVolumeRequest{CreateVolumeDetails: details}
 	ctx, cancel := context.WithTimeout(p.ctx, p.timeout)
 	defer cancel()

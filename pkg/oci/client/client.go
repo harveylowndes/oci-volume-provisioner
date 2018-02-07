@@ -47,7 +47,7 @@ func FromConfig(cfg *Config) (*ProvisionerClient, error) {
 
 func newConfigurationProvider(cfg *Config) (common.ConfigurationProvider, error) {
 	var conf common.ConfigurationProvider
-	if conf == nil {
+	if cfg == nil {
 		conf = common.DefaultConfigProvider()
 	} else {
 		err := cfg.Validate()
