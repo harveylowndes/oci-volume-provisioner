@@ -163,6 +163,8 @@ func newConfigurationProvider(cfg *Config) (common.ConfigurationProvider, error)
 	return conf, nil
 }
 
+// configureCustomTransport customizes the base client's transport to use
+// the environment specified proxy and/or certificate.
 func configureCustomTransport(baseClient *common.BaseClient) error {
 
 	httpClient := baseClient.HTTPClient.(*http.Client)
