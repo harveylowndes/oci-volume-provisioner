@@ -90,11 +90,17 @@ func (block *blockProvisioner) Provision(options controller.VolumeOptions,
 
 	ctx, cancel := context.WithTimeout(block.client.Context(), block.client.Timeout())
 	defer cancel()
+
+	prefix := os.Getenv(volumePrefixEnvVarName)
+	if prefix != "" {
+		prefix = fmt.Sprintf("%s%s", prefix, "-")
+	}
+
 	newVolume, err := block.client.BlockStorage().CreateVolume(ctx, core.CreateVolumeRequest{
 		CreateVolumeDetails: core.CreateVolumeDetails{
 			AvailabilityDomain: availabilityDomain.Name,
 			CompartmentId:      common.String(block.client.CompartmentOCID()),
-			DisplayName:        common.String(fmt.Sprintf("%s%s", os.Getenv(volumePrefixEnvVarName), options.PVC.Name)),
+			DisplayName:        common.String(fmt.Sprintf("%s%s", prefix, options.PVC.Name)),
 			SizeInMBs:          common.Int(volSizeMB),
 		},
 	})
